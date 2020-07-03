@@ -33,7 +33,7 @@ const WorkoutSchema = new Schema({
     type: Date,
     default: Date.now()
   },
-  totalExercise: Number,
+  totalDistance: Number,
   totalDuration: Number,
   exercises: [ExerciseSchema]
 });

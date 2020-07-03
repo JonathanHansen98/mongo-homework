@@ -11,19 +11,14 @@ mongoose.connect("mongodb://localhost/workout", {
 
 Router.get("/api/workouts", async (req, res) => {
   try {
-    const data = await (await db.Workout.find({}).populate('Exercise'));
-    // loop through all workouts
+    let data = await (await db.Workout.find({}));
     data.forEach(workout => {
-     // set global variable totalDuration
      let totalDuration = 0;
      let totalDistance = 0;
-     // inside workout loop, loop through exercises
       workout.exercises.forEach(exercise => {
-        // add the duration of each exercise to totalDuration
         totalDuration += exercise.duration
         totalDistance += exercise.distance
       })
-      // set totalDuration property to each workout equal to the totalDuration
       workout.totalDuration = totalDuration
       workout.totalDistnace = totalDistance
     })
@@ -40,19 +35,11 @@ Router.get("/api/workouts", async (req, res) => {
   }
 }).get("/api/workouts/range",async(req,res)=>{
   try {
-    // get first elements in desc order
-    
-  //  const data = await db.Workout.find({}).sort({day:'desc'}).limit(7);
-  //  const range =[];
-  //  data.forEach(workout => {
-  //    range.unshift(workout)
-  //  })
+    // get first documents in desc order
+    // last 7 days in desc order should be the newest 7 days for the graphs to use
+   const data = await db.Workout.find({}).sort({day:'desc'}).limit(7);
 
-  // Get just last 7 elements in current order
-  //  res.json(range)
-  //  const range = data.slice( data.length - 7, data.length + 1)
-  //  console.log( 'range' + range)
-  //  res.json(range);
+   res.json(data);
 
   } catch (error) {
    console.log(error);
